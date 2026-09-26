@@ -138,12 +138,13 @@ export function FormularioTransacao() {
         visible={seletorAberto}
         onRequestClose={() => setSeletorAberto(false)}
       >
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Fechar opções de tipo"
-          onPress={() => setSeletorAberto(false)}
-          style={styles.fundoModal}
-        >
+        <View style={styles.fundoModal}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Fechar opções de tipo"
+            onPress={() => setSeletorAberto(false)}
+            style={StyleSheet.absoluteFill}
+          />
           <View style={styles.opcoesTipo}>
             {['Ganhos', 'Gastos'].map((opcao) => (
               <Pressable
@@ -159,7 +160,7 @@ export function FormularioTransacao() {
               </Pressable>
             ))}
           </View>
-        </Pressable>
+        </View>
       </Modal>
     </View>
   );
@@ -249,6 +250,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 24,
     backgroundColor: '#00000099',
+    overflow: 'hidden',
   },
   opcoesTipo: {
     borderWidth: 1,
