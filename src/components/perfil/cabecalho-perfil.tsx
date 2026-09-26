@@ -1,6 +1,6 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
-export function CabecalhoPerfil({ nome, provedor, foto }: { nome: string; provedor: string; foto: string | null }) {
+export function CabecalhoPerfil({ nome, provedor, foto, aoTrocarFoto, atualizandoFoto }: { nome: string; provedor: string; foto: string | null; aoTrocarFoto: () => void; atualizandoFoto: boolean }) {
   const iniciais = nome
     .split(' ')
     .filter(Boolean)
@@ -12,12 +12,12 @@ export function CabecalhoPerfil({ nome, provedor, foto }: { nome: string; proved
   return (
     <View style={styles.container}>
       <View style={styles.capa} />
-      <View accessibilityLabel={`Foto de perfil de ${nome}`} style={styles.avatar}>
+      <Pressable accessibilityRole="button" accessibilityLabel={`Alterar foto de perfil de ${nome}`} onPress={aoTrocarFoto} style={styles.avatar}>
         {foto ? <Image source={{ uri: foto }} style={styles.foto} /> : <Text style={styles.iniciais}>{iniciais}</Text>}
         <View style={styles.indicadorCamera}>
-          <Text style={styles.iconeCamera}>▣</Text>
+          <Text style={styles.iconeCamera}>{atualizandoFoto ? '…' : '▣'}</Text>
         </View>
-      </View>
+      </Pressable>
       <View style={styles.identificacao}>
         <Text style={styles.tipoConta}>{provedor}</Text>
         <Text style={styles.nome}>{nome}</Text>

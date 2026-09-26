@@ -1,10 +1,13 @@
 import { FirebaseError, getApp, getApps, initializeApp } from 'firebase/app';
+import * as FirebaseAuth from 'firebase/auth';
 import {
   getAuth,
-  inMemoryPersistence,
   initializeAuth,
   type Auth,
 } from 'firebase/auth';
+import { Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
@@ -23,12 +26,22 @@ const conexao = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
 let autenticacao: Auth;
 try {
-  autenticacao = initializeAuth(conexao, {
-    persistence: inMemoryPersistence,
-  });
+  if (Platform.OS === 'web') {
+    autenticacao = getAuth(conexao);
+  } else {
+    // O SDK React Native exporta esse helper em seu entry point nativo.
+    const authRN = FirebaseAuth as typeof FirebaseAuth & {
+      getReactNativePersistence: (storage: typeof AsyncStorage) => import('firebase/auth').Persistence;
+    };
+    autenticacao = initializeAuth(conexao, {
+      persistence: authRN.getReactNativePersistence(AsyncStorage),
+    });
+  }
 } catch (error) {
   if ((error as { code?: string }).code !== 'auth/already-initialized') throw error;
   autenticacao = getAuth(conexao);
 }
 
-export { autenticacao, FirebaseError };
+const armazenamento = getStorage(conexao);
+
+export { autenticacao, armazenamento, FirebaseError };

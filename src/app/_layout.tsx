@@ -10,7 +10,8 @@ function NavegacaoRaiz() {
 
   useEffect(() => {
     if (carregando) return;
-    const rotaPublica = segmentos[0] === 'index' || segmentos[0] === 'criar-conta';
+    const segmentoAtual = segmentos[0] as string;
+    const rotaPublica = segmentoAtual === 'index' || segmentoAtual === 'criar-conta';
     if (!usuario && !rotaPublica) router.replace('/');
     if (usuario && rotaPublica) router.replace('/inicio');
   }, [carregando, segmentos, usuario, router]);

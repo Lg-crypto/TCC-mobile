@@ -154,19 +154,7 @@ export function TelaAutenticacao({ modo }: { modo: Modo }) {
               value={senha}
             />
 
-            {cadastro ? (
-              <View style={styles.entradaComIcone}>
-                <Text style={styles.icone}>🇧🇷⌄</Text>
-                <TextInput
-                  accessibilityLabel="Número de telefone"
-                  autoComplete="tel"
-                  keyboardType="phone-pad"
-                  placeholder="(00) 00000-0000"
-                  placeholderTextColor={CORES.secundaria}
-                  style={styles.entradaTexto}
-                />
-              </View>
-            ) : (
+            {!cadastro && (
               <Pressable onPress={enviarRedefinicao} style={styles.recuperar}>
                 <Text style={styles.linkRecuperacao}>forget my password</Text>
               </Pressable>

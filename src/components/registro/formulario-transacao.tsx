@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import {
+  Alert,
   Modal,
   Pressable,
   StyleSheet,
@@ -7,6 +8,9 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import { router } from 'expo-router';
+
+import { criarRegistro } from '@/services/Registros';
 
 const CORES = {
   painel: '#17191f',
@@ -20,6 +24,35 @@ const CORES = {
 export function FormularioTransacao() {
   const [tipo, setTipo] = useState('Ganhos');
   const [seletorAberto, setSeletorAberto] = useState(false);
+  const [nome, setNome] = useState('');
+  const [valor, setValor] = useState('');
+  const [comentario, setComentario] = useState('');
+  const [salvando, setSalvando] = useState(false);
+
+  const salvar = async () => {
+    const valorNumerico = Number(valor.trim().replace(/\./g, '').replace(',', '.'));
+    if (!nome.trim() || !Number.isFinite(valorNumerico) || valorNumerico <= 0) {
+      Alert.alert('Dados inválidos', 'Informe o nome da transação e um valor maior que zero.');
+      return;
+    }
+    const agora = new Date();
+    const data = `${String(agora.getDate()).padStart(2, '0')}/${String(agora.getMonth() + 1).padStart(2, '0')}/${agora.getFullYear()}`;
+    const dateKey = `${agora.getFullYear()}-${String(agora.getMonth() + 1).padStart(2, '0')}-${String(agora.getDate()).padStart(2, '0')}`;
+    setSalvando(true);
+    try {
+      await criarRegistro({
+        gain: tipo === 'Ganhos', value: valorNumerico, date: data, dateKey,
+        description: nome.trim(), destination_or_source: tipo === 'Ganhos' ? 'Other' : 'Food',
+        comment: comentario.trim(),
+      });
+      Alert.alert('Transação salva', 'O lançamento foi adicionado ao seu histórico.');
+      router.replace('/inicio');
+    } catch (erro) {
+      Alert.alert('Não foi possível salvar', erro instanceof Error ? erro.message : 'Tente novamente.');
+    } finally {
+      setSalvando(false);
+    }
+  };
 
   return (
     <View style={styles.cartao}>
@@ -38,7 +71,9 @@ export function FormularioTransacao() {
             accessibilityLabel="Nome da transação"
             placeholder="Ex.: Salgado da cantina"
             placeholderTextColor={CORES.secundario}
+            onChangeText={setNome}
             style={styles.entradaTexto}
+            value={nome}
           />
         </View>
       </View>
@@ -66,7 +101,9 @@ export function FormularioTransacao() {
             keyboardType="decimal-pad"
             placeholder="R$ 0,00"
             placeholderTextColor={CORES.secundario}
+            onChangeText={setValor}
             style={styles.entradaTexto}
+            value={valor}
           />
         </View>
       </View>
@@ -78,19 +115,21 @@ export function FormularioTransacao() {
           multiline
           placeholder="Adicione uma observação (opcional)"
           placeholderTextColor={CORES.secundario}
+          onChangeText={setComentario}
           style={[styles.entradaTexto, styles.comentario]}
           textAlignVertical="top"
+          value={comentario}
         />
       </View>
 
       <View style={styles.acoes}>
-        <View style={styles.botaoCancelar}>
+        <Pressable accessibilityRole="button" onPress={() => router.back()} style={styles.botaoCancelar}>
           <Text style={styles.textoCancelar}>Cancelar</Text>
-        </View>
-        <View style={styles.botaoSalvar}>
+        </Pressable>
+        <Pressable accessibilityRole="button" disabled={salvando} onPress={salvar} style={styles.botaoSalvar}>
           <Text style={styles.mais}>＋</Text>
-          <Text style={styles.textoSalvar}>Salvar transação</Text>
-        </View>
+          <Text style={styles.textoSalvar}>{salvando ? 'Salvando…' : 'Salvar transação'}</Text>
+        </Pressable>
       </View>
 
       <Modal
