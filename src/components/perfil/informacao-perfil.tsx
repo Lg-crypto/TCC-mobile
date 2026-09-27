@@ -1,6 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native';
+import { Cores, Fontes } from '@/constants/theme';
 
-export function InformacaoPerfil({ rotulo, valor }: { rotulo: string; valor: string }) {
+export interface InformacaoPerfilProps {
+  rotulo: string;
+  valor: string;
+}
+
+export function InformacaoPerfil({ rotulo, valor }: InformacaoPerfilProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.rotulo}>{rotulo}</Text>
@@ -11,6 +17,6 @@ export function InformacaoPerfil({ rotulo, valor }: { rotulo: string; valor: str
 
 const styles = StyleSheet.create({
   container: { gap: 7, paddingVertical: 2 },
-  rotulo: { color: '#91939f', fontSize: 15 },
-  valor: { color: '#f1f2f5', fontSize: 17 },
+  rotulo: { color: Cores.textoSecundario, fontSize: Fontes.tamanhos.corpo, fontFamily: Fontes.regular },
+  valor: { color: Cores.texto, fontSize: Fontes.tamanhos.medio, fontFamily: Fontes.regular },
 });

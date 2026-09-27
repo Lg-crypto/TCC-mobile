@@ -13,6 +13,7 @@ import { NavegacaoInferior } from '@/components/registro/navegacao-inferior';
 import { useAutenticacaoContexto } from '@/context/autenticacao-contexto';
 import { autenticacao, armazenamento } from '@/services/Firebase';
 import { useAutenticacao } from '@/hooks/use-autenticacao';
+import { Cores, Fontes } from '@/constants/theme';
 
 export default function PerfilScreen() {
   const { usuario } = useAutenticacaoContexto();
@@ -94,10 +95,10 @@ export default function PerfilScreen() {
 }
 
 const styles = StyleSheet.create({
-  tela: { flex: 1, backgroundColor: '#0c0d10' },
+  tela: { flex: 1, backgroundColor: Cores.fundo },
   conteudo: { paddingTop: 0, paddingBottom: 18 },
   informacoes: { gap: 21, paddingHorizontal: 46, paddingBottom: 20 },
-  botaoSair: { marginHorizontal: 24, marginTop: 8, marginBottom: 24, height: 48, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: '#653843', borderRadius: 12, backgroundColor: '#21151a' },
-  textoSair: { color: '#ff839c', fontSize: 14, fontWeight: '600' },
+  botaoSair: { marginHorizontal: 24, marginTop: 8, marginBottom: 24, height: 48, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: Cores.negativo, borderRadius: 12, backgroundColor: Cores.painel },
+  textoSair: { color: Cores.negativo, fontSize: Fontes.tamanhos.corpo, fontFamily: Fontes.negrito },
   rodape: { paddingTop: 8, paddingBottom: 18 },
 });

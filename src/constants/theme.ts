@@ -24,6 +24,44 @@ export const Colors = {
   },
 } as const;
 
+export const Cores = {
+  fundo: '#0c0d10',
+  painel: '#17191f',
+  campo: '#101218',
+  borda: '#2b2e38',
+  texto: '#f5f5f6',
+  textoSecundario: '#aeb2be',
+  textoSuave: '#d6d8df',
+  verde: '#23cb6b',
+  positivo: '#24d878',
+  negativo: '#ff668f',
+  branco: '#ffffff',
+  barraInferior: '#dedede',
+  iconeBarra: '#4c4c4c',
+  bordaSecundaria: '#30343f',
+  fundoModal: '#00000099',
+  capaPerfil: '#5a7a7c',
+  avatarPerfil: '#243a3e',
+  fundoControleFoto: '#ffffff99',
+  marcaGoogle: '#4285f4',
+} as const;
+
+export const Fontes = {
+  leve: 'MontserratLight',
+  regular: 'MontserratRegular',
+  negrito: 'MontserratBold',
+  tamanhos: {
+    legenda: 10,
+    pequeno: 12,
+    corpo: 14,
+    medio: 16,
+    subtitulo: 20,
+    titulo: 24,
+    destaque: 30,
+    grande: 34,
+  },
+} as const;
+
 export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
 
 export const Fonts = Platform.select({

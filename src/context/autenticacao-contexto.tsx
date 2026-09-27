@@ -18,6 +18,11 @@ type AutenticacaoContextoTipo = {
   salvarSessao: (usuario: User) => Promise<void>;
   limparSessao: () => Promise<void>;
 };
+
+interface AutenticacaoProviderProps {
+  children: ReactNode;
+}
+
 const AutenticacaoContexto = createContext<AutenticacaoContextoTipo | undefined>(undefined);
 
 function converterUsuario(usuario: User): UsuarioSessao {
@@ -31,7 +36,7 @@ function converterUsuario(usuario: User): UsuarioSessao {
   };
 }
 
-export function AutenticacaoProvider({ children }: { children: ReactNode }) {
+export function AutenticacaoProvider({ children }: AutenticacaoProviderProps) {
   const [usuario, setUsuario] = useState<UsuarioSessao | null>(null);
   const [carregando, setCarregando] = useState(true);
 

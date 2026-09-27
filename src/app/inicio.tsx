@@ -1,12 +1,14 @@
 import { router } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 
 import { useAutenticacaoContexto } from '@/context/autenticacao-contexto';
 import { NavegacaoInferior } from '@/components/registro/navegacao-inferior';
 import { observarRegistros, type Registro } from '@/services/Registros';
+import { Cores, Fontes } from '@/constants/theme';
 
 const DINHEIRO = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
 
@@ -72,7 +74,7 @@ export default function InicioScreen() {
         </View>
 
         <Pressable onPress={() => router.push('/criar-registro')} style={styles.botaoAdicionar}>
-          <Text style={styles.mais}>＋</Text>
+          <MaterialIcons name="add" size={22} color={Cores.branco} />
           <Text style={styles.textoBotao}>Nova transação</Text>
         </Pressable>
       </ScrollView>
@@ -84,29 +86,28 @@ export default function InicioScreen() {
 }
 
 const styles = StyleSheet.create({
-  tela: { flex: 1, backgroundColor: '#0c0d10' },
+  tela: { flex: 1, backgroundColor: Cores.fundo },
   conteudo: { flexGrow: 1, padding: 22, gap: 18 },
-  eyebrow: { color: '#a6a8b2', fontSize: 11, letterSpacing: 1.2, marginTop: 12 },
-  titulo: { color: '#f5f5f6', fontSize: 24, fontWeight: '700', marginTop: -13 },
-  saldo: { padding: 20, borderRadius: 18, borderWidth: 1, borderColor: '#2b2e38', backgroundColor: '#17191f', gap: 7 },
-  rotuloSaldo: { color: '#a3a6b1', fontSize: 11, letterSpacing: 1 },
-  valorSaldo: { color: '#f5f5f6', fontSize: 30, fontWeight: '700' },
-  descricaoSaldo: { color: '#a3a6b1', fontSize: 12 },
+  eyebrow: { color: Cores.textoSecundario, fontSize: Fontes.tamanhos.legenda, fontFamily: Fontes.negrito, letterSpacing: 1.2, marginTop: 12 },
+  titulo: { color: Cores.texto, fontSize: Fontes.tamanhos.titulo, fontFamily: Fontes.negrito, marginTop: -13 },
+  saldo: { padding: 20, borderRadius: 18, borderWidth: 1, borderColor: Cores.borda, backgroundColor: Cores.painel, gap: 7 },
+  rotuloSaldo: { color: Cores.textoSecundario, fontSize: Fontes.tamanhos.legenda, fontFamily: Fontes.regular, letterSpacing: 1 },
+  valorSaldo: { color: Cores.texto, fontSize: Fontes.tamanhos.destaque, fontFamily: Fontes.negrito },
+  descricaoSaldo: { color: Cores.textoSecundario, fontSize: Fontes.tamanhos.pequeno, fontFamily: Fontes.regular },
   resumos: { flexDirection: 'row', gap: 12 },
-  cartaoResumo: { flex: 1, minHeight: 82, justifyContent: 'center', gap: 6, padding: 14, borderRadius: 14, borderWidth: 1, borderColor: '#2b2e38', backgroundColor: '#17191f' },
-  rotuloResumo: { color: '#a3a6b1', fontSize: 12 },
-  valorResumo: { fontSize: 15, fontWeight: '600' },
-  positivo: { color: '#24d878' },
-  negativo: { color: '#ff668f' },
+  cartaoResumo: { flex: 1, minHeight: 82, justifyContent: 'center', gap: 6, padding: 14, borderRadius: 14, borderWidth: 1, borderColor: Cores.borda, backgroundColor: Cores.painel },
+  rotuloResumo: { color: Cores.textoSecundario, fontSize: Fontes.tamanhos.pequeno, fontFamily: Fontes.regular },
+  valorResumo: { fontSize: Fontes.tamanhos.corpo, fontFamily: Fontes.negrito },
+  positivo: { color: Cores.positivo },
+  negativo: { color: Cores.negativo },
   historico: { gap: 14, paddingTop: 7 },
-  tituloHistorico: { color: '#f5f5f6', fontSize: 17, fontWeight: '600' },
-  vazio: { color: '#a3a6b1', fontSize: 13, paddingVertical: 18, textAlign: 'center' },
-  registro: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: 13, borderRadius: 12, borderWidth: 1, borderColor: '#2b2e38', backgroundColor: '#17191f' },
+  tituloHistorico: { color: Cores.texto, fontSize: Fontes.tamanhos.medio, fontFamily: Fontes.negrito },
+  vazio: { color: Cores.textoSecundario, fontSize: Fontes.tamanhos.corpo, fontFamily: Fontes.regular, paddingVertical: 18, textAlign: 'center' },
+  registro: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: 13, borderRadius: 12, borderWidth: 1, borderColor: Cores.borda, backgroundColor: Cores.painel },
   registroTexto: { flex: 1, gap: 4 },
-  registroNome: { color: '#f5f5f6', fontSize: 13, fontWeight: '500' },
-  registroData: { color: '#a3a6b1', fontSize: 11 },
-  botaoAdicionar: { height: 48, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 5, borderRadius: 12, backgroundColor: '#23cb6b' },
-  mais: { color: 'white', fontSize: 21 },
-  textoBotao: { color: 'white', fontSize: 14, fontWeight: '700' },
+  registroNome: { color: Cores.texto, fontSize: Fontes.tamanhos.corpo, fontFamily: Fontes.regular },
+  registroData: { color: Cores.textoSecundario, fontSize: Fontes.tamanhos.legenda, fontFamily: Fontes.regular },
+  botaoAdicionar: { height: 48, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 5, borderRadius: 12, backgroundColor: Cores.verde },
+  textoBotao: { color: Cores.branco, fontSize: Fontes.tamanhos.corpo, fontFamily: Fontes.negrito },
   rodape: { paddingTop: 8, paddingBottom: 18 },
 });

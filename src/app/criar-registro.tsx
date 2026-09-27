@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 
 import { FormularioTransacao } from '@/components/registro/formulario-transacao';
 import { NavegacaoInferior } from '@/components/registro/navegacao-inferior';
+import { Cores } from '@/constants/theme';
 
 export default function CriarRegistroScreen() {
   return (
@@ -23,7 +24,7 @@ export default function CriarRegistroScreen() {
 }
 
 const styles = StyleSheet.create({
-  tela: { flex: 1, backgroundColor: '#0c0d10' },
+  tela: { flex: 1, backgroundColor: Cores.fundo },
   conteudo: {
     flexGrow: 1,
     justifyContent: 'center',

@@ -9,17 +9,12 @@ import {
   View,
 } from 'react-native';
 import { router } from 'expo-router';
+import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 
 import { criarRegistro } from '@/services/Registros';
+import { Cores, Fontes } from '@/constants/theme';
 
-const CORES = {
-  painel: '#17191f',
-  campo: '#101218',
-  borda: '#2b2e38',
-  texto: '#f5f5f6',
-  secundario: '#aeb2be',
-  verde: '#23cb6b',
-};
+const CORES = Cores;
 
 const CATEGORIAS_GANHO = [
   { valor: 'Salary', rotulo: 'Salário' },
@@ -86,11 +81,11 @@ export function FormularioTransacao() {
       <View style={styles.campoGrupo}>
         <Text style={styles.rotulo}>Nome</Text>
         <View style={styles.entradaComIcone}>
-          <Text style={styles.iconeCampo}>◇</Text>
+          <MaterialIcons name="sell" size={18} color={CORES.textoSecundario} />
           <TextInput
             accessibilityLabel="Nome da transação"
             placeholder="Ex.: Salgado da cantina"
-            placeholderTextColor={CORES.secundario}
+            placeholderTextColor={CORES.textoSecundario}
             onChangeText={setNome}
             style={styles.entradaTexto}
             value={nome}
@@ -106,9 +101,9 @@ export function FormularioTransacao() {
           onPress={() => setSeletorAberto(true)}
           style={styles.seletor}
         >
-          <Text style={styles.iconeCampo}>▣</Text>
+          <MaterialIcons name="swap-vert" size={18} color={CORES.textoSecundario} />
           <Text style={styles.valorSeletor}>{tipo}</Text>
-          <Text style={styles.seta}>⌄</Text>
+          <MaterialIcons name="arrow-drop-down" size={22} color={CORES.textoSecundario} />
         </Pressable>
       </View>
 
@@ -120,23 +115,23 @@ export function FormularioTransacao() {
           onPress={() => setSeletorCategoriaAberto(true)}
           style={styles.seletor}
         >
-          <Text style={styles.iconeCampo}>◇</Text>
+          <MaterialIcons name="label-outline" size={18} color={CORES.textoSecundario} />
           <Text style={styles.valorSeletor}>
             {categorias.find((item) => item.valor === categoria)?.rotulo ?? categoria}
           </Text>
-          <Text style={styles.seta}>⌄</Text>
+          <MaterialIcons name="arrow-drop-down" size={22} color={CORES.textoSecundario} />
         </Pressable>
       </View>
 
       <View style={styles.campoGrupo}>
         <Text style={styles.rotulo}>Valor</Text>
         <View style={styles.entradaComIcone}>
-          <Text style={styles.iconeCampo}>$</Text>
+          <MaterialIcons name="payments" size={18} color={CORES.textoSecundario} />
           <TextInput
             accessibilityLabel="Valor da transação"
             keyboardType="decimal-pad"
             placeholder="R$ 0,00"
-            placeholderTextColor={CORES.secundario}
+            placeholderTextColor={CORES.textoSecundario}
             onChangeText={setValor}
             style={styles.entradaTexto}
             value={valor}
@@ -150,7 +145,7 @@ export function FormularioTransacao() {
           accessibilityLabel="Comentário da transação"
           multiline
           placeholder="Adicione uma observação (opcional)"
-          placeholderTextColor={CORES.secundario}
+          placeholderTextColor={CORES.textoSecundario}
           onChangeText={setComentario}
           style={[styles.entradaTexto, styles.comentario]}
           textAlignVertical="top"
@@ -163,7 +158,7 @@ export function FormularioTransacao() {
           <Text style={styles.textoCancelar}>Cancelar</Text>
         </Pressable>
         <Pressable accessibilityRole="button" disabled={salvando} onPress={salvar} style={styles.botaoSalvar}>
-          <Text style={styles.mais}>＋</Text>
+          <MaterialIcons name="add" size={20} color={CORES.branco} />
           <Text style={styles.textoSalvar}>{salvando ? 'Salvando…' : 'Salvar transação'}</Text>
         </Pressable>
       </View>
@@ -245,10 +240,10 @@ const styles = StyleSheet.create({
     gap: 14,
   },
   introducao: { gap: 4, marginBottom: 1 },
-  titulo: { color: CORES.texto, fontSize: 20, fontWeight: '700' },
-  descricao: { color: CORES.secundario, fontSize: 12, lineHeight: 16 },
+  titulo: { color: CORES.texto, fontSize: Fontes.tamanhos.subtitulo, fontFamily: Fontes.negrito },
+  descricao: { color: CORES.textoSecundario, fontSize: Fontes.tamanhos.pequeno, fontFamily: Fontes.regular, lineHeight: 16 },
   campoGrupo: { gap: 7 },
-  rotulo: { color: '#d6d8df', fontSize: 12, fontWeight: '500' },
+  rotulo: { color: CORES.textoSuave, fontSize: Fontes.tamanhos.pequeno, fontFamily: Fontes.regular },
   entradaComIcone: {
     minHeight: 46,
     flexDirection: 'row',
@@ -260,12 +255,12 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: CORES.campo,
   },
-  iconeCampo: { color: CORES.secundario, fontSize: 17, minWidth: 16 },
   entradaTexto: {
     flex: 1,
     minHeight: 44,
     color: CORES.texto,
-    fontSize: 13,
+    fontSize: Fontes.tamanhos.corpo,
+    fontFamily: Fontes.regular,
     paddingHorizontal: 12,
     paddingVertical: 10,
   },
@@ -280,8 +275,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: CORES.campo,
   },
-  valorSeletor: { color: CORES.texto, fontSize: 13, flex: 1 },
-  seta: { color: CORES.secundario, fontSize: 20, marginTop: -7 },
+  valorSeletor: { color: CORES.texto, fontSize: Fontes.tamanhos.corpo, fontFamily: Fontes.regular, flex: 1 },
   comentario: {
     minHeight: 82,
     borderWidth: 1,
@@ -297,10 +291,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: '#30343f',
+    borderColor: CORES.bordaSecundaria,
     borderRadius: 12,
   },
-  textoCancelar: { color: '#d7d9df', fontSize: 13 },
+  textoCancelar: { color: CORES.textoSuave, fontSize: Fontes.tamanhos.corpo, fontFamily: Fontes.regular },
   botaoSalvar: {
     flex: 1.25,
     height: 44,
@@ -311,13 +305,12 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: CORES.verde,
   },
-  mais: { color: 'white', fontSize: 20, fontWeight: '600' },
-  textoSalvar: { color: 'white', fontSize: 12, fontWeight: '700' },
+  textoSalvar: { color: CORES.branco, fontSize: Fontes.tamanhos.pequeno, fontFamily: Fontes.negrito },
   fundoModal: {
     flex: 1,
     justifyContent: 'center',
     padding: 24,
-    backgroundColor: '#00000099',
+    backgroundColor: CORES.fundoModal,
     overflow: 'hidden',
   },
   opcoesTipo: {

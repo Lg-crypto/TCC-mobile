@@ -16,15 +16,21 @@ import { router } from 'expo-router';
 import { FirebaseError } from 'firebase/app';
 import * as WebBrowser from 'expo-web-browser';
 import { useIdTokenAuthRequest } from 'expo-auth-session/providers/google';
+import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 
 import { firebaseConfigurado } from '@/services/Firebase';
 import { useAutenticacao } from '@/hooks/use-autenticacao';
+import { Cores, Fontes } from '@/constants/theme';
 
 type Modo = 'login' | 'cadastro';
 
+export interface TelaAutenticacaoProps {
+  modo: Modo;
+}
+
 WebBrowser.maybeCompleteAuthSession();
 
-export function TelaAutenticacao({ modo }: { modo: Modo }) {
+export function TelaAutenticacao({ modo }: TelaAutenticacaoProps) {
   const cadastro = modo === 'cadastro';
   const [primeiroNome, setPrimeiroNome] = useState('');
   const [ultimoNome, setUltimoNome] = useState('');
@@ -34,6 +40,7 @@ export function TelaAutenticacao({ modo }: { modo: Modo }) {
   const [enviandoGoogle, setEnviandoGoogle] = useState(false);
   const respostaProcessada = useRef<unknown>(null);
   const { entrar, criarConta, entrarComGoogle, redefinirSenha } = useAutenticacao();
+  // O Expo AuthSession abre o OAuth do Google para a plataforma escolhida e devolve um id_token; os três client IDs vêm do .env.
   const [requisicaoGoogle, respostaGoogle, abrirGoogle] = useIdTokenAuthRequest({
     webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID ?? 'google-web-client-not-configured',
     iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID ?? 'google-ios-client-not-configured',
@@ -77,6 +84,7 @@ export function TelaAutenticacao({ modo }: { modo: Modo }) {
       return;
     }
 
+    // O token retornado pelo Google é trocado por uma credencial Firebase; signInWithCredential resolve com a conta autenticada.
     entrarComGoogle(idToken)
       .then(() => router.replace('/inicio'))
       .catch(mostrarErro)
@@ -181,7 +189,7 @@ export function TelaAutenticacao({ modo }: { modo: Modo }) {
                   autoCapitalize="words"
                   onChangeText={setPrimeiroNome}
                   placeholder="First Name"
-                  placeholderTextColor={CORES.secundaria}
+                  placeholderTextColor={Cores.textoSecundario}
                   style={[styles.entrada, styles.nomeEntrada]}
                   value={primeiroNome}
                 />
@@ -190,7 +198,7 @@ export function TelaAutenticacao({ modo }: { modo: Modo }) {
                   autoCapitalize="words"
                   onChangeText={setUltimoNome}
                   placeholder="Last Name"
-                  placeholderTextColor={CORES.secundaria}
+                  placeholderTextColor={Cores.textoSecundario}
                   style={[styles.entrada, styles.nomeEntrada]}
                   value={ultimoNome}
                 />
@@ -198,7 +206,7 @@ export function TelaAutenticacao({ modo }: { modo: Modo }) {
             )}
 
             <View style={styles.entradaComIcone}>
-              <Text style={styles.icone}>@</Text>
+              <MaterialIcons name="mail-outline" size={19} color={Cores.textoSecundario} />
               <TextInput
                 accessibilityLabel="E-mail"
                 autoCapitalize="none"
@@ -206,7 +214,7 @@ export function TelaAutenticacao({ modo }: { modo: Modo }) {
                 keyboardType="email-address"
                 onChangeText={setEmail}
                 placeholder="Enter your email"
-                placeholderTextColor={CORES.secundaria}
+                placeholderTextColor={Cores.textoSecundario}
                 style={styles.entradaTexto}
                 value={email}
               />
@@ -217,7 +225,7 @@ export function TelaAutenticacao({ modo }: { modo: Modo }) {
               autoComplete={cadastro ? 'new-password' : 'password'}
               onChangeText={setSenha}
               placeholder="Enter your password"
-              placeholderTextColor={CORES.secundaria}
+              placeholderTextColor={Cores.textoSecundario}
               secureTextEntry
               style={styles.entrada}
               value={senha}
@@ -261,9 +269,8 @@ export function TelaAutenticacao({ modo }: { modo: Modo }) {
   );
 }
 
-const CORES = { fundo: '#0c0d10', painel: '#25262d', borda: '#41434d', secundaria: '#c0c1ca', verde: '#20c665' };
 const styles = StyleSheet.create({
-  tela: { flex: 1, backgroundColor: CORES.fundo },
+  tela: { flex: 1, backgroundColor: Cores.fundo },
   teclado: { flex: 1 },
   conteudo: {
     flexGrow: 1,
@@ -279,14 +286,14 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   aba: { minWidth: 48, alignItems: "center", gap: 5 },
-  textoAba: { color: "#a8a8b1", fontSize: 14 },
-  abaAtiva: { color: "#f3f3f5" },
-  sublinhado: { width: 35, height: 1, backgroundColor: "#f2f2f2" },
+  textoAba: { color: Cores.textoSecundario, fontSize: Fontes.tamanhos.corpo, fontFamily: Fontes.regular },
+  abaAtiva: { color: Cores.texto },
+  sublinhado: { width: 35, height: 1, backgroundColor: Cores.texto },
   formulario: { gap: 15, marginTop: 56, marginBottom: "auto" },
   titulo: {
-    color: "#f5f5f6",
-    fontSize: 21,
-    fontWeight: "600",
+    color: Cores.texto,
+    fontSize: Fontes.tamanhos.subtitulo,
+    fontFamily: Fontes.negrito,
     marginBottom: 3,
   },
   linhaNome: { flexDirection: "row", gap: 14 },
@@ -294,10 +301,11 @@ const styles = StyleSheet.create({
   entrada: {
     height: 43,
     borderRadius: 9,
-    backgroundColor: CORES.painel,
-    color: "#f5f5f6",
+    backgroundColor: Cores.painel,
+    color: Cores.texto,
     paddingHorizontal: 15,
-    fontSize: 13,
+    fontSize: Fontes.tamanhos.corpo,
+    fontFamily: Fontes.regular,
     borderWidth: 1,
     borderColor: "transparent",
   },
@@ -307,21 +315,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 8,
     borderRadius: 9,
-    backgroundColor: CORES.painel,
+    backgroundColor: Cores.painel,
     paddingLeft: 12,
   },
-  icone: { color: CORES.secundaria, fontSize: 16 },
   entradaTexto: {
     flex: 1,
     height: 43,
-    color: "#f5f5f6",
+    color: Cores.texto,
     paddingHorizontal: 5,
-    fontSize: 13,
+    fontSize: Fontes.tamanhos.corpo,
+    fontFamily: Fontes.regular,
   },
   recuperar: { alignSelf: "flex-start", marginTop: -6, marginLeft: 10 },
   linkRecuperacao: {
-    color: "#b8b8c0",
-    fontSize: 10,
+    color: Cores.textoSecundario,
+    fontSize: Fontes.tamanhos.legenda,
+    fontFamily: Fontes.regular,
     textDecorationLine: "underline",
   },
   botaoPrimario: {
@@ -329,19 +338,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 8,
-    backgroundColor: CORES.verde,
+    backgroundColor: Cores.verde,
     marginTop: 39,
   },
   pressionado: { opacity: 0.82 },
-  textoBotao: { color: "white", fontSize: 16, fontWeight: "600" },
+  textoBotao: { color: Cores.branco, fontSize: Fontes.tamanhos.medio, fontFamily: Fontes.negrito },
   divisor: {
     flexDirection: "row",
     alignItems: "center",
     gap: 19,
     marginTop: 22,
   },
-  linha: { height: 1, flex: 1, backgroundColor: "#b8b8bc" },
-  textoDivisor: { color: "#b8b8bc", fontSize: 12 },
+  linha: { height: 1, flex: 1, backgroundColor: Cores.textoSecundario },
+  textoDivisor: { color: Cores.textoSecundario, fontSize: Fontes.tamanhos.pequeno, fontFamily: Fontes.regular },
   botaoGoogle: {
     height: 43,
     width: "88%",
@@ -352,9 +361,9 @@ const styles = StyleSheet.create({
     gap: 20,
     marginTop: 11,
     borderRadius: 10,
-    backgroundColor: "#eeeeef",
+    backgroundColor: Cores.branco,
   },
   botaoDesabilitado: { opacity: 0.6 },
-  googleG: { color: "#4285f4", fontSize: 21, fontWeight: "800" },
-  textoGoogle: { color: "#121212", fontSize: 16, fontWeight: "600" },
+  googleG: { color: Cores.marcaGoogle, fontSize: Fontes.tamanhos.subtitulo, fontFamily: Fontes.negrito },
+  textoGoogle: { color: Cores.fundo, fontSize: Fontes.tamanhos.medio, fontFamily: Fontes.negrito },
 });

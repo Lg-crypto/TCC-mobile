@@ -1,6 +1,16 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { MaterialIcons } from '@react-native-vector-icons/material-icons';
+import { Cores, Fontes } from '@/constants/theme';
 
-export function CabecalhoPerfil({ nome, provedor, foto, aoTrocarFoto, atualizandoFoto }: { nome: string; provedor: string; foto: string | null; aoTrocarFoto: () => void; atualizandoFoto: boolean }) {
+export interface CabecalhoPerfilProps {
+  nome: string;
+  provedor: string;
+  foto: string | null;
+  aoTrocarFoto: () => void;
+  atualizandoFoto: boolean;
+}
+
+export function CabecalhoPerfil({ nome, provedor, foto, aoTrocarFoto, atualizandoFoto }: CabecalhoPerfilProps) {
   const iniciais = nome
     .split(' ')
     .filter(Boolean)
@@ -15,7 +25,9 @@ export function CabecalhoPerfil({ nome, provedor, foto, aoTrocarFoto, atualizand
       <Pressable accessibilityRole="button" accessibilityLabel={`Alterar foto de perfil de ${nome}`} onPress={aoTrocarFoto} style={styles.avatar}>
         {foto ? <Image source={{ uri: foto }} style={styles.foto} /> : <Text style={styles.iniciais}>{iniciais}</Text>}
         <View style={styles.indicadorCamera}>
-          <Text style={styles.iconeCamera}>{atualizandoFoto ? '…' : '▣'}</Text>
+          {atualizandoFoto
+            ? <MaterialIcons name="hourglass-top" size={18} color={Cores.texto} />
+            : <MaterialIcons name="camera-alt" size={18} color={Cores.texto} />}
         </View>
       </Pressable>
       <View style={styles.identificacao}>
@@ -33,10 +45,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 6,
     overflow: 'hidden',
     borderBottomWidth: 1,
-    borderColor: '#2c303a',
+    borderColor: Cores.borda,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
-    backgroundColor: '#5a7a7c',
+    backgroundColor: Cores.capaPerfil,
   },
   avatar: {
     width: 136,
@@ -47,10 +59,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 70,
     borderWidth: 5,
-    borderColor: '#0c0d10',
-    backgroundColor: '#243a3e',
+    borderColor: Cores.fundo,
+    backgroundColor: Cores.avatarPerfil,
   },
-  iniciais: { color: '#f5f5f6', fontSize: 34, fontWeight: '600' },
+  iniciais: { color: Cores.texto, fontSize: Fontes.tamanhos.grande, fontFamily: Fontes.negrito },
   foto: { width: '100%', height: '100%', borderRadius: 70 },
   indicadorCamera: {
     position: 'absolute',
@@ -59,10 +71,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,
-    backgroundColor: '#ffffff99',
+    backgroundColor: Cores.fundoControleFoto,
   },
-  iconeCamera: { color: '#31333a', fontSize: 17 },
   identificacao: { marginTop: 11, paddingHorizontal: 24, gap: 5 },
-  tipoConta: { color: '#f1f2f5', fontSize: 16 },
-  nome: { color: '#f5f5f6', fontSize: 25, fontWeight: '700', lineHeight: 31 },
+  tipoConta: { color: Cores.texto, fontSize: Fontes.tamanhos.medio, fontFamily: Fontes.regular },
+  nome: { color: Cores.texto, fontSize: Fontes.tamanhos.titulo, fontFamily: Fontes.negrito, lineHeight: 31 },
 });
