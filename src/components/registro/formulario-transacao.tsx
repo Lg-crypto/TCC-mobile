@@ -21,13 +21,29 @@ const CORES = {
   verde: '#23cb6b',
 };
 
+const CATEGORIAS_GANHO = [
+  { valor: 'Salary', rotulo: 'Salário' },
+  { valor: 'Other', rotulo: 'Freelance / Outros' },
+];
+const CATEGORIAS_GASTO = [
+  { valor: 'House', rotulo: 'Casa' },
+  { valor: 'Shopping', rotulo: 'Mercado / Compras' },
+  { valor: 'Food', rotulo: 'Alimentação' },
+  { valor: 'Transport', rotulo: 'Transporte' },
+  { valor: 'Entertainment', rotulo: 'Entretenimento' },
+  { valor: 'Other', rotulo: 'Outros' },
+];
+
 export function FormularioTransacao() {
   const [tipo, setTipo] = useState('Ganhos');
   const [seletorAberto, setSeletorAberto] = useState(false);
+  const [categoria, setCategoria] = useState('Salary');
+  const [seletorCategoriaAberto, setSeletorCategoriaAberto] = useState(false);
   const [nome, setNome] = useState('');
   const [valor, setValor] = useState('');
   const [comentario, setComentario] = useState('');
   const [salvando, setSalvando] = useState(false);
+  const categorias = tipo === 'Ganhos' ? CATEGORIAS_GANHO : CATEGORIAS_GASTO;
 
   const salvar = async () => {
     const valorLimpo = valor.trim().replace(/\s/g, '').replace(/^R\$/i, '');
@@ -46,7 +62,7 @@ export function FormularioTransacao() {
     try {
       await criarRegistro({
         gain: tipo === 'Ganhos', value: valorNumerico, date: data, dateKey,
-        description: nome.trim(), destination_or_source: tipo === 'Ganhos' ? 'Other' : 'Food',
+        description: nome.trim(), destination_or_source: categoria,
         comment: comentario.trim(),
       });
       Alert.alert('Transação salva', 'O lançamento foi adicionado ao seu histórico.');
@@ -92,6 +108,22 @@ export function FormularioTransacao() {
         >
           <Text style={styles.iconeCampo}>▣</Text>
           <Text style={styles.valorSeletor}>{tipo}</Text>
+          <Text style={styles.seta}>⌄</Text>
+        </Pressable>
+      </View>
+
+      <View style={styles.campoGrupo}>
+        <Text style={styles.rotulo}>Categoria</Text>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={`Categoria da transação: ${categorias.find((item) => item.valor === categoria)?.rotulo ?? categoria}`}
+          onPress={() => setSeletorCategoriaAberto(true)}
+          style={styles.seletor}
+        >
+          <Text style={styles.iconeCampo}>◇</Text>
+          <Text style={styles.valorSeletor}>
+            {categorias.find((item) => item.valor === categoria)?.rotulo ?? categoria}
+          </Text>
           <Text style={styles.seta}>⌄</Text>
         </Pressable>
       </View>
@@ -156,11 +188,43 @@ export function FormularioTransacao() {
                 key={opcao}
                 onPress={() => {
                   setTipo(opcao);
+                  setCategoria(opcao === 'Ganhos' ? 'Salary' : 'House');
                   setSeletorAberto(false);
                 }}
                 style={styles.opcaoTipo}
               >
                 <Text style={styles.valorSeletor}>{opcao}</Text>
+              </Pressable>
+            ))}
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="fade"
+        transparent
+        visible={seletorCategoriaAberto}
+        onRequestClose={() => setSeletorCategoriaAberto(false)}
+      >
+        <View style={styles.fundoModal}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Fechar opções de categoria"
+            onPress={() => setSeletorCategoriaAberto(false)}
+            style={StyleSheet.absoluteFill}
+          />
+          <View style={styles.opcoesTipo}>
+            {categorias.map((opcao) => (
+              <Pressable
+                accessibilityRole="button"
+                key={opcao.valor}
+                onPress={() => {
+                  setCategoria(opcao.valor);
+                  setSeletorCategoriaAberto(false);
+                }}
+                style={styles.opcaoTipo}
+              >
+                <Text style={styles.valorSeletor}>{opcao.rotulo}</Text>
               </Pressable>
             ))}
           </View>
