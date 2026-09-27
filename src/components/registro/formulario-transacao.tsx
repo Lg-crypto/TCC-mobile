@@ -30,7 +30,11 @@ export function FormularioTransacao() {
   const [salvando, setSalvando] = useState(false);
 
   const salvar = async () => {
-    const valorNumerico = Number(valor.trim().replace(/\./g, '').replace(',', '.'));
+    const valorLimpo = valor.trim().replace(/\s/g, '').replace(/^R\$/i, '');
+    const valorNormalizado = valorLimpo.includes(',')
+      ? valorLimpo.replace(/\./g, '').replace(',', '.')
+      : valorLimpo;
+    const valorNumerico = Number(valorNormalizado);
     if (!nome.trim() || !Number.isFinite(valorNumerico) || valorNumerico <= 0) {
       Alert.alert('Dados inválidos', 'Informe o nome da transação e um valor maior que zero.');
       return;

@@ -1,6 +1,5 @@
 import { onAuthStateChanged, type User } from 'firebase/auth';
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { autenticacao } from '@/services/Firebase';
 
@@ -20,7 +19,6 @@ type AutenticacaoContextoTipo = {
   limparSessao: () => Promise<void>;
 };
 const AutenticacaoContexto = createContext<AutenticacaoContextoTipo | undefined>(undefined);
-const CHAVE_SESSAO = '@WWallet:usuario';
 
 function converterUsuario(usuario: User): UsuarioSessao {
   return {
@@ -40,12 +38,10 @@ export function AutenticacaoProvider({ children }: { children: ReactNode }) {
   async function salvarSessao(usuarioAutenticado: User) {
     const sessao = converterUsuario(usuarioAutenticado);
     setUsuario(sessao);
-    await AsyncStorage.setItem(CHAVE_SESSAO, JSON.stringify(sessao));
   }
 
   async function limparSessao() {
     setUsuario(null);
-    await AsyncStorage.removeItem(CHAVE_SESSAO);
   }
 
   useEffect(
@@ -54,8 +50,7 @@ export function AutenticacaoProvider({ children }: { children: ReactNode }) {
         if (usuarioAutenticado) {
           await salvarSessao(usuarioAutenticado);
         } else {
-          const sessaoSalva = await AsyncStorage.getItem(CHAVE_SESSAO);
-          setUsuario(sessaoSalva ? JSON.parse(sessaoSalva) as UsuarioSessao : null);
+          setUsuario(null);
         }
       } catch (erro) {
         console.warn('Não foi possível carregar a sessão salva.', erro);

@@ -1,5 +1,5 @@
 import { FirebaseError, getApp, getApps, initializeApp } from 'firebase/app';
-import * as FirebaseAuth from 'firebase/auth';
+import * as FirebaseAuth from '@firebase/auth';
 import {
   getAuth,
   initializeAuth,
@@ -30,7 +30,7 @@ try {
     autenticacao = getAuth(conexao);
   } else {
     // O SDK React Native exporta esse helper em seu entry point nativo.
-    const authRN = FirebaseAuth as typeof FirebaseAuth & {
+    const authRN = FirebaseAuth as unknown as typeof FirebaseAuth & {
       getReactNativePersistence: (storage: typeof AsyncStorage) => import('firebase/auth').Persistence;
     };
     autenticacao = initializeAuth(conexao, {

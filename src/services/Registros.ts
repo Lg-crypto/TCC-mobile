@@ -14,7 +14,7 @@ export type Registro = {
   comment: string;
 };
 
-const banco = getFirestore();
+const banco = getFirestore(autenticacao.app);
 
 export function observarRegistros(uid: string, aoAtualizar: (registros: Registro[]) => void, aoFalhar: (erro: Error) => void): Unsubscribe {
   const consulta = query(collection(banco, 'users', uid, 'records'), orderBy('dateKey', 'desc'));

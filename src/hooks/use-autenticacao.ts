@@ -1,6 +1,8 @@
 import {
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
   sendPasswordResetEmail,
+  signInWithCredential,
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
@@ -29,10 +31,17 @@ export function useAutenticacao() {
     return sendPasswordResetEmail(autenticacao, email.trim());
   }
 
+  async function entrarComGoogle(idToken: string) {
+    const credencialGoogle = GoogleAuthProvider.credential(idToken);
+    const credencial = await signInWithCredential(autenticacao, credencialGoogle);
+    await salvarSessao(credencial.user);
+    return credencial;
+  }
+
   async function sair() {
     await limparSessao();
     return signOut(autenticacao);
   }
 
-  return { entrar, criarConta, redefinirSenha, sair };
+  return { entrar, criarConta, entrarComGoogle, redefinirSenha, sair };
 }

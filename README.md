@@ -16,6 +16,16 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npx expo start
    ```
 
+## Login com Google
+
+O login Google usa o Firebase Authentication e o fluxo OAuth do Expo. No Console do Firebase, habilite o provedor Google em **Authentication → Sign-in method**. Configure os clientes OAuth do mesmo projeto Google/Firebase e preencha no `.env` os IDs correspondentes:
+
+- `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`
+- `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID`
+- `EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID`
+
+Copie os nomes de variáveis de `.env.example`. Os IDs de cliente são públicos; não coloque client secrets no aplicativo. Para Android, configure o nome de pacote e os fingerprints SHA-1 dos certificados no Firebase. Para testar autenticação nativa, use um development build com o esquema `wwallet`; o Expo Go usa a identidade nativa genérica dele e não substitui os clientes OAuth do aplicativo.
+
 In the output, you'll find options to open the app in a
 
 - [development build](https://docs.expo.dev/develop/development-builds/introduction/)

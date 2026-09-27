@@ -16,7 +16,14 @@ export default function InicioScreen() {
   const [erroRegistros, setErroRegistros] = useState(false);
   useEffect(() => {
     if (!usuario?.uid) return;
-    return observarRegistros(usuario.uid, setRegistros, () => setErroRegistros(true));
+    return observarRegistros(
+      usuario.uid,
+      (novosRegistros) => {
+        setRegistros(novosRegistros);
+        setErroRegistros(false);
+      },
+      () => setErroRegistros(true),
+    );
   }, [usuario?.uid]);
   const totais = useMemo(() => registros.reduce((acumulado, registro) => {
     if (registro.gain) acumulado.ganhos += registro.value;
